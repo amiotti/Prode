@@ -1,22 +1,22 @@
-import "../App.css";
-import { Link, useNavigate } from "react-router-dom";
-import TokenServices from "../services/token.services";
-import { useContext } from "react";
-import { UserContext } from "./Context";
-import AuthVerify from "../common/AuthVerify";
+import "../App.css"
+import { Link, useNavigate } from "react-router-dom"
+import TokenServices from "../services/token.services"
+import { useContext } from "react"
+import { UserContext } from "./Context"
+import AuthVerify from "../common/AuthVerify"
 
 function Navigation() {
-  const userLogged = AuthVerify(); //localStorage.getItem("accessToken");
-  console.log("USERLOGGED", userLogged);
-  const navigate = useNavigate();
+  const userLogged = AuthVerify() //localStorage.getItem("accessToken");
+  // console.log("USERLOGGED", userLogged);
+  const navigate = useNavigate()
 
   const handleLogOut = () => {
-    TokenServices.removeUser();
-    navigate("/login");
-  };
+    TokenServices.removeUser()
+    navigate("/login")
+  }
 
-  const { id, teams, groupMatches, getImg } = useContext(UserContext);
-  console.log("CONTEXT_NAV", useContext(UserContext));
+  const { id, teams, groupMatches, getImg } = useContext(UserContext)
+  // console.log("CONTEXT_NAV", useContext(UserContext));
 
   return (
     <>
@@ -86,7 +86,7 @@ function Navigation() {
         </div>
       </nav>
     </>
-  );
+  )
 }
 
-export default Navigation;
+export default Navigation

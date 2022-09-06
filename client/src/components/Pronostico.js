@@ -148,7 +148,6 @@ export default function Pronostico(props) {
 
   async function handleChange(e, i, id, home, away, group) {
     const { name, value } = e.target
-    console.log(e.target.value)
 
     /* -------------------------------------------------------------------------- */
     /*        Validando los inputs con el botón habilitado o deshabilitado        */
@@ -163,7 +162,7 @@ export default function Pronostico(props) {
         group,
         results: [
           {
-            matchId: name,
+            matchId: id,
             homeTeam: home,
             homeValue,
             awayTeam: away,
@@ -185,7 +184,7 @@ export default function Pronostico(props) {
           group,
           results: [
             {
-              matchId: name,
+              matchId: id,
               homeTeam: home,
               homeValue,
               awayTeam: away,
@@ -193,12 +192,33 @@ export default function Pronostico(props) {
             },
           ],
         })
+      } else {
+        let isAddedResult = false
+        for (const iterator of inputsResults) {
+          if (iterator.group === group) {
+            for (let index = 0; index < iterator.results.length; index++) {
+              if (id === iterator.results[index].matchId) {
+                isAddedResult = true
+              }
+            }
+
+            if (isAddedResult) {
+              console.log("Si hay resultado agregado")
+            } else {
+              console.log("Nuevo resultado")
+              iterator.results.push({
+                matchId: id,
+                homeTeam: home,
+                homeValue,
+                awayTeam: away,
+                awayValue,
+              })
+              console.log(iterator.results)
+            }
+          }
+        }
       }
     }
-    console.log(inputsResults)
-    // for (const iterator of inputsResults) {
-    //   console.log(iterator)
-    // }
 
     const list = [...results, {}]
 
@@ -209,9 +229,9 @@ export default function Pronostico(props) {
     list[i]["matchId"] = id
     list[i]["homeTeam"] = home
     list[i]["awayTeam"] = away
-    console.log("LIST", list)
+    // console.log("LIST", list)
     setTest(list2)
-    console.log("TEST", test)
+    // console.log("TEST", test)
     setResults(list)
   }
 
