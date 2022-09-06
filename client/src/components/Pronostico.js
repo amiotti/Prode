@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import "../App.css";
+import "../css/pronostico.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Carousel from "react-bootstrap/Carousel";
 import AuthVerify from "../common/AuthVerify";
@@ -7,8 +8,11 @@ import Navigation from "./Navigation";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "./Context";
 
-export default function Pronostico() {
+export default function Pronostico(props) {
   const userLogged = AuthVerify();
+
+  //const location = useLocation();
+  //const { id, groupMatches, teams, getImg } = location.state || {}; // empty object is to avoid destructuring of null error
   const { id, teams, groupMatches, getImg } = useContext(UserContext);
 
   const [results, setResults] = useState([
@@ -104,54 +108,60 @@ export default function Pronostico() {
       groupX.map((match, i) => (
         <>
           <li key={match.id} className="matches">
-            <img
-              className="home-img"
-              src={
-                /*props.*/ getImg
-                  .filter((img) => img.id === match.homeTeam.id)
-                  .map((url) => url.url)
-              }
-            />
-            <h4>{match.homeTeam.name}</h4>
-            <input
-              className="input-pronosticos"
-              name="goalHome"
-              value={results.goalHome}
-              onChange={(e) =>
-                handleChange(
-                  e,
-                  i,
-                  match.id,
-                  match.homeTeam.name,
-                  match.awayTeam.name
-                )
-              }
-            />
+            <div className="paisesIzquierda">
+              <img
+                className="home-img mr-3"
+                src={
+                  /*props.*/ getImg
+                    .filter((img) => img.id === match.homeTeam.id)
+                    .map((url) => url.url)
+                }
+              />
+              <h4 className="mr-3">{match.homeTeam.name}</h4>
+              <input
+                className="input-pronosticos"
+                name="goalHome"
+                value={results.goalHome}
+                onChange={(e) =>
+                  handleChange(
+                    e,
+                    i,
+                    match.id,
+                    match.homeTeam.name,
+                    match.awayTeam.name
+                  )
+                }
+              />
+            </div>
 
             <h4 className="vs-text">vs</h4>
-            <h4>{match.awayTeam.name}</h4>
-            <img
-              className="home-img"
-              src={
-                /*props.*/ getImg
-                  .filter((img) => img.id === match.awayTeam.id)
-                  .map((url) => url.url)
-              }
-            />
-            <input
-              className="input-pronosticos"
-              name="goalAway"
-              value={results.goalAway}
-              onChange={(e) =>
-                handleChange(
-                  e,
-                  i,
-                  match.id,
-                  match.homeTeam.name,
-                  match.awayTeam.name
-                )
-              }
-            />
+
+            <div className="paisesDerecha">
+              <input
+                className="input-pronosticos"
+                name="goalAway"
+                value={results.goalAway}
+                onChange={(e) =>
+                  handleChange(
+                    e,
+                    i,
+                    match.id,
+                    match.homeTeam.name,
+                    match.awayTeam.name
+                  )
+                }
+              />
+
+              <h4 className="ml-3">{match.awayTeam.name}</h4>
+              <img
+                className="home-img ml-3"
+                src={
+                  /*props.*/ getImg
+                    .filter((img) => img.id === match.awayTeam.id)
+                    .map((url) => url.url)
+                }
+              />
+            </div>
           </li>
         </>
       ))
@@ -164,12 +174,24 @@ export default function Pronostico() {
       <Carousel interval={null}>
         {groups.map((group) => (
           <Carousel.Item>
-            <div className="containerCarrousel">
+            <div className="containerCarrousel carrusel">
               <h2>
                 {"GRUPO"} {group}
               </h2>
-              <ul>{carrouselElement(group)}</ul>
-              <button onClick={handleSubmit}>Enviar</button>
+
+              <ul>
+                {carrouselElement(group)}
+                <div className="cajaBoton">
+                  <button
+                    disabled={disable}
+                    onClick={handleSubmit}
+                    className="btn btn-outline-light mt-5 p-30 w-25 btnEnviar"
+                    id="btnEnviar"
+                  >
+                    Enviar
+                  </button>
+                </div>
+              </ul>
             </div>
           </Carousel.Item>
         ))}
