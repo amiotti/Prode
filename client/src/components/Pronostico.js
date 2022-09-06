@@ -12,6 +12,8 @@ import { UserContext } from "./Context"
 export default function Pronostico(props) {
   const userLogged = AuthVerify()
 
+  const [inputsResults, setinputsResults] = useState([])
+
   //const location = useLocation();
   //const { id, groupMatches, teams, getImg } = location.state || {}; // empty object is to avoid destructuring of null error
   const { id, teams, groupMatches, getImg } = useContext(UserContext)
@@ -144,9 +146,59 @@ export default function Pronostico(props) {
     }
   }
 
-  async function handleChange(e, i, id, home, away) {
+  async function handleChange(e, i, id, home, away, group) {
     const { name, value } = e.target
     console.log(e.target.value)
+
+    /* -------------------------------------------------------------------------- */
+    /*        Validando los inputs con el botón habilitado o deshabilitado        */
+    /* -------------------------------------------------------------------------- */
+
+    let homeValue = ""
+    let awayValue = ""
+    "goalHome" === name ? (homeValue = value) : (awayValue = value)
+
+    if (inputsResults.length === 0) {
+      inputsResults.push({
+        group,
+        results: [
+          {
+            matchId: name,
+            homeTeam: home,
+            homeValue,
+            awayTeam: away,
+            awayValue,
+          },
+        ],
+      })
+    } else {
+      let isFoundGroup = false
+
+      for (const iterator of inputsResults) {
+        if (iterator.group === group) {
+          isFoundGroup = true
+        }
+      }
+
+      if (!isFoundGroup) {
+        inputsResults.push({
+          group,
+          results: [
+            {
+              matchId: name,
+              homeTeam: home,
+              homeValue,
+              awayTeam: away,
+              awayValue,
+            },
+          ],
+        })
+      }
+    }
+    console.log(inputsResults)
+    // for (const iterator of inputsResults) {
+    //   console.log(iterator)
+    // }
 
     const list = [...results, {}]
 
@@ -195,7 +247,8 @@ export default function Pronostico(props) {
                     i,
                     match.id,
                     match.homeTeam.name,
-                    match.awayTeam.name
+                    match.awayTeam.name,
+                    group
                   )
                 }
               />
@@ -214,7 +267,8 @@ export default function Pronostico(props) {
                     i,
                     match.id,
                     match.homeTeam.name,
-                    match.awayTeam.name
+                    match.awayTeam.name,
+                    group
                   )
                 }
               />
