@@ -69,6 +69,10 @@ export default function Login() {
     }
   };
 
+  const handleSubmitReg = () => {
+    navigate("/registro");
+  };
+
   return (
     <div className="container px-4 px-lg-5">
       <div className="row gx-4 gx-lg-5 justify-content-center">
@@ -140,7 +144,16 @@ export default function Login() {
               >
                 Login
               </button>
+              <button
+                className="btn btn-primary btn-xl"
+                id="submitButton"
+                type="submit"
+                onClick={handleSubmitReg}
+              >
+                Registro
+              </button>
             </div>
+            <div className="d-grid"></div>
           </form>
         </div>
       </div>

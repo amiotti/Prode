@@ -12,6 +12,7 @@ import Fechas from "./components/Fechas";
 import Contact from "./components/Contact";
 import { UserContext } from "./components/Context";
 import Navigation from "./components/Navigation";
+import moment from "moment";
 
 function App() {
   const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
@@ -32,6 +33,7 @@ function App() {
   const [groupMatches, setGroupMatches] = useState([]);
   const [getImg, setGetImg] = useState("");
   const [id, setId] = useState(null);
+  const [today, setToday] = useState("");
 
   const getFlags = async (name) => {
     const flags = await fetch(urlFlags);
@@ -85,8 +87,41 @@ function App() {
     fetchTeams();
   }, []);
 
+  //for Fechas.js
+  useEffect(() => {
+    const fetchMatches = async () => {
+      const hoy = moment(Date.now()).format("DD/MM/YYYY");
+      const futuro = moment("2022-11-23T01:00:00-0300").format("DD/MM/YYYY");
+      try {
+        const data = await fetch(urlMatches, {
+          headers: { "X-Auth-Token": `${apiToken}` },
+        });
+        const partidos = await data.json();
+
+        setToday(
+          await partidos.matches.filter(
+            (dia) => moment(dia.utcDate).format("DD/MM/YYYY") === futuro
+          )
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchMatches();
+  }, []);
+
   return (
-    <UserContext.Provider value={{ id, setId, teams, groupMatches, getImg }}>
+    <UserContext.Provider
+      value={{
+        id,
+        setId,
+        today,
+        setToday,
+        teams,
+        groupMatches,
+        getImg,
+      }}
+    >
       <>
         <div id="page-top">
           <Router>

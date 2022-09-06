@@ -7,10 +7,10 @@ import UserService from "../services/user.services";
 
 const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
 
-const Resultados = (props) => {
+const Resultados = () => {
   const userLogged = AuthVerify();
-  const location = useLocation();
-  const { id, groupMatches, teams, getImg } = location.state || {};
+  //const location = useLocation();
+  //const { id, groupMatches, teams, getImg } = location.state || {};
   const [users, setUsers] = useState([]);
   const [table, setTable] = useState({});
   const [loading, setLoading] = useState(false);
@@ -96,10 +96,14 @@ const Resultados = (props) => {
     getBets();
 
     const getUsers = async () => {
-      const allUsers = await UserService.getAllUsers();
+      try {
+        const allUsers = await UserService.getAllUsers();
 
-      setUsers(allUsers.data);
-      setLoading2(true);
+        setUsers(allUsers.data);
+        setLoading2(true);
+      } catch (error) {
+        console.log(error.message);
+      }
     };
     getUsers();
   }, []);
