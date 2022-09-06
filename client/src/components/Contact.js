@@ -12,8 +12,7 @@ export default function Contact() {
   const [textarea, setTextTarea] = useState("");
 
   const userLogged = AuthVerify();
-
-  const { getImg, groupMatches } = useContext(UserContext);
+  const { getImg } = useContext(UserContext);
   console.log(getImg);
   const handleSubmit = async () => {
     const response = await axios.post("/contact", {

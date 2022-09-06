@@ -11,8 +11,8 @@ import Suscripcion from "./components/Suscripcion";
 import Fechas from "./components/Fechas";
 import Contact from "./components/Contact";
 import { UserContext } from "./components/Context";
-import Navigation from "./components/Navigation";
 import moment from "moment";
+import UserService from "./services/user.services";
 
 function App() {
   const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
@@ -34,6 +34,10 @@ function App() {
   const [getImg, setGetImg] = useState("");
   const [id, setId] = useState(null);
   const [today, setToday] = useState("");
+  const [users, setUsers] = useState([]);
+  const [table, setTable] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
   const getFlags = async (name) => {
     const flags = await fetch(urlFlags);
@@ -110,6 +114,89 @@ function App() {
     fetchMatches();
   }, []);
 
+  //for Resultados.js
+  const testMatch = [
+    { matchId: 391881, winner: "Netherlands", goalHome: 2, goalAway: 3 },
+    { matchId: 391882, winner: "Draw", goalHome: 0, goalAway: 0 },
+    { matchId: 391883, winner: "Qatar", goalHome: 3, goalAway: 2 },
+  ];
+  useEffect(() => {
+    const getBets = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/pronosticos");
+
+        const bets = await response.json();
+        let ids = await bets.map((bet) => bet.userId);
+        let uniqueIds = [...new Set(ids)];
+        let obj = [];
+
+        for (let j = 0; j < uniqueIds.length; j++) {
+          let points = 0;
+          let userFilter = bets.filter((bet) => bet.userId === uniqueIds[j]); //filter by userId
+          //console.log("USERFILTER", userFilter);
+
+          for (let k = 0; k < testMatch.length; k++) {
+            let caseWinner =
+              userFilter.filter(
+                (match) => match.matchId === testMatch[k].matchId
+              )[0].winner === testMatch[k].winner;
+
+            let caseGoalHome =
+              userFilter.filter(
+                (match) => match.matchId === testMatch[k].matchId
+              )[0].goalHome === testMatch[k].goalHome;
+            let caseGoalAway =
+              userFilter.filter(
+                (match) => match.matchId === testMatch[k].matchId
+              )[0].goalAway === testMatch[k].goalAway;
+
+            if (caseWinner) {
+              points += 3;
+            }
+
+            if (caseGoalHome) {
+              points += 3;
+            }
+
+            if (caseGoalAway) {
+              points += 3;
+            }
+
+            //All
+            if (caseWinner && caseGoalHome && caseGoalAway) {
+              points += 10;
+            }
+          }
+          obj.push({ userId: uniqueIds[j], points });
+
+          //setTable(obj);
+        }
+
+        setTable(
+          obj.sort((a, b) => {
+            return b.points - a.points;
+          })
+        );
+        setLoading(true);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getBets();
+
+    const getUsers = async () => {
+      try {
+        const allUsers = await UserService.getAllUsers();
+
+        setUsers(allUsers.data);
+        setLoading2(true);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getUsers();
+  }, []);
+
   return (
     <UserContext.Provider
       value={{
@@ -120,6 +207,10 @@ function App() {
         teams,
         groupMatches,
         getImg,
+        users,
+        table,
+        loading,
+        loading2,
       }}
     >
       <>

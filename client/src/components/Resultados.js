@@ -1,20 +1,16 @@
-import { useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
 import "../App.css";
 import AuthVerify from "../common/AuthVerify";
 import Navigation from "./Navigation";
-import UserService from "../services/user.services";
+import { UserContext } from "./Context";
 
 const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
 
 const Resultados = () => {
   const userLogged = AuthVerify();
-  //const location = useLocation();
-  //const { id, groupMatches, teams, getImg } = location.state || {};
-  const [users, setUsers] = useState([]);
-  const [table, setTable] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [loading2, setLoading2] = useState(false);
+
+  const { users, table, loading, loading2 } = useContext(UserContext);
 
   async function fetchData() {
     try {
@@ -31,124 +27,47 @@ const Resultados = () => {
     }
   }
 
-  useEffect(() => {
-    const getBets = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/pronosticos");
-
-        const bets = await response.json();
-        let ids = await bets.map((bet) => bet.userId);
-        let uniqueIds = [...new Set(ids)];
-        let obj = [];
-
-        for (let j = 0; j < uniqueIds.length; j++) {
-          let points = 0;
-          let userFilter = bets.filter((bet) => bet.userId === uniqueIds[j]); //filter by userId
-          //console.log("USERFILTER", userFilter);
-
-          for (let k = 0; k < testMatch.length; k++) {
-            let caseWinner =
-              userFilter.filter(
-                (match) => match.matchId === testMatch[k].matchId
-              )[0].winner === testMatch[k].winner;
-
-            let caseGoalHome =
-              userFilter.filter(
-                (match) => match.matchId === testMatch[k].matchId
-              )[0].goalHome === testMatch[k].goalHome;
-            let caseGoalAway =
-              userFilter.filter(
-                (match) => match.matchId === testMatch[k].matchId
-              )[0].goalAway === testMatch[k].goalAway;
-
-            if (caseWinner) {
-              points += 3;
-            }
-
-            if (caseGoalHome) {
-              points += 3;
-            }
-
-            if (caseGoalAway) {
-              points += 3;
-            }
-
-            //All
-            if (caseWinner && caseGoalHome && caseGoalAway) {
-              points += 10;
-            }
-          }
-          obj.push({ userId: uniqueIds[j], points });
-
-          //setTable(obj);
-        }
-
-        setTable(
-          obj.sort((a, b) => {
-            return b.points - a.points;
-          })
-        );
-        setLoading(true);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    getBets();
-
-    const getUsers = async () => {
-      try {
-        const allUsers = await UserService.getAllUsers();
-
-        setUsers(allUsers.data);
-        setLoading2(true);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    getUsers();
-  }, []);
-
-  const testMatch = [
-    { matchId: 391881, winner: "Netherlands", goalHome: 2, goalAway: 3 },
-    { matchId: 391882, winner: "Draw", goalHome: 0, goalAway: 0 },
-    { matchId: 391883, winner: "Qatar", goalHome: 3, goalAway: 2 },
-  ];
+  // const testMatch = [
+  //   { matchId: 391881, winner: "Netherlands", goalHome: 2, goalAway: 3 },
+  //   { matchId: 391882, winner: "Draw", goalHome: 0, goalAway: 0 },
+  //   { matchId: 391883, winner: "Qatar", goalHome: 3, goalAway: 2 },
+  // ];
 
   //{userId:1, points: 19 + 3 + 0 = 22}
   //{userId:2, points: 6 + 0 + 0 = 6}
 
-  const testBet = [
-    {
-      matchId: 391881,
-      winner: "Netherlands",
-      goalHome: 2,
-      goalAway: 3,
-      userId: 1,
-    },
-    { matchId: 391882, winner: "Draw", goalHome: 1, goalAway: 1, userId: 1 },
-    {
-      matchId: 391883,
-      winner: "Senegal",
-      goalHome: 1,
-      goalAway: 3,
-      userId: 1,
-    },
-    {
-      matchId: 391881,
-      winner: "Netherlands",
-      goalHome: 1,
-      goalAway: 3,
-      userId: 2,
-    },
-    { matchId: 391882, winner: "Qatar", goalHome: 2, goalAway: 1, userId: 2 },
-    {
-      matchId: 391883,
-      winner: "Draw",
-      goalHome: 1,
-      goalAway: 1,
-      userId: 2,
-    },
-  ];
+  // const testBet = [
+  //   {
+  //     matchId: 391881,
+  //     winner: "Netherlands",
+  //     goalHome: 2,
+  //     goalAway: 3,
+  //     userId: 1,
+  //   },
+  //   { matchId: 391882, winner: "Draw", goalHome: 1, goalAway: 1, userId: 1 },
+  //   {
+  //     matchId: 391883,
+  //     winner: "Senegal",
+  //     goalHome: 1,
+  //     goalAway: 3,
+  //     userId: 1,
+  //   },
+  //   {
+  //     matchId: 391881,
+  //     winner: "Netherlands",
+  //     goalHome: 1,
+  //     goalAway: 3,
+  //     userId: 2,
+  //   },
+  //   { matchId: 391882, winner: "Qatar", goalHome: 2, goalAway: 1, userId: 2 },
+  //   {
+  //     matchId: 391883,
+  //     winner: "Draw",
+  //     goalHome: 1,
+  //     goalAway: 1,
+  //     userId: 2,
+  //   },
+  // ];
 
   return userLogged ? (
     table && users && loading && loading2 && (
