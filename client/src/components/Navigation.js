@@ -1,13 +1,12 @@
 import "../App.css";
 import { Link, useNavigate } from "react-router-dom";
 import TokenServices from "../services/token.services";
-import { useContext } from "react";
-import { UserContext } from "./Context";
+// import { useContext } from "react";
+// import { UserContext } from "./Context";
 import AuthVerify from "../common/AuthVerify";
 
 function Navigation() {
   const userLogged = AuthVerify(); //localStorage.getItem("accessToken");
-  console.log("USERLOGGED", userLogged);
   const navigate = useNavigate();
 
   const handleLogOut = () => {
@@ -15,8 +14,7 @@ function Navigation() {
     navigate("/login");
   };
 
-  const { id, teams, groupMatches, getImg } = useContext(UserContext);
-  console.log("CONTEXT_NAV", useContext(UserContext));
+  //const { id, teams, groupMatches, getImg } = useContext(UserContext);
 
   return (
     <>
@@ -25,9 +23,9 @@ function Navigation() {
         id="mainNav"
       >
         <div className="container px-4 px-lg-5">
-          <a className="navbar-brand" /*href="#page-top"*/>
+          <h3 className="navbar-brand" /*href="#page-top"*/>
             {userLogged.name} {userLogged.lastname}
-          </a>
+          </h3>
           <button
             className="navbar-toggler navbar-toggler-right"
             type="button"
@@ -51,7 +49,7 @@ function Navigation() {
               </li>
               <li className="nav-item">
                 <Link to="/resultados">
-                  <a className="nav-link" /*href="#services"*/>Resultados</a>
+                  <a className="nav-link" /*href="#services"*/>Posiciones</a>
                 </Link>
               </li>
               <li className="nav-item">
