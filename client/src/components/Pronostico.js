@@ -1,29 +1,30 @@
-import { useState, useContext } from "react";
-import { useLocation } from "react-router-dom";
-import "../App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Carousel from "react-bootstrap/Carousel";
-import AuthVerify from "../common/AuthVerify";
-import Navigation from "./Navigation";
-import { Navigate } from "react-router-dom";
-import { UserContext } from "./Context";
+import { useState, useContext } from "react"
+import { useLocation } from "react-router-dom"
+import "../App.css"
+import "../css/pronostico.css"
+import "bootstrap/dist/css/bootstrap.min.css"
+import Carousel from "react-bootstrap/Carousel"
+import AuthVerify from "../common/AuthVerify"
+import Navigation from "./Navigation"
+import { Navigate } from "react-router-dom"
+import { UserContext } from "./Context"
 
 export default function Pronostico(props) {
-  const userLogged = AuthVerify();
+  const userLogged = AuthVerify()
 
   //const location = useLocation();
   //const { id, groupMatches, teams, getImg } = location.state || {}; // empty object is to avoid destructuring of null error
-  const { id, teams, groupMatches, getImg } = useContext(UserContext);
+  const { id, teams, groupMatches, getImg } = useContext(UserContext)
 
   const [results, setResults] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
-  ]);
+  ])
   const [test, setTest] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
-  ]);
-  const [disable, setDisable] = useState(false);
+  ])
+  const [disable, setDisable] = useState(false)
 
-  const groups = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  const groups = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
   // useEffect(() => {
   //   const fetchMatches = async () => {
@@ -90,29 +91,29 @@ export default function Pronostico(props) {
   // };
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      const aux = [];
+      const aux = []
       for (let i = 0; i < 6; i++) {
-        aux.push(results[i]);
+        aux.push(results[i])
 
         if (aux[i].homeTeam === null) {
-          aux[i].homeTeam = "Qualy Pending";
+          aux[i].homeTeam = "Qualy Pending"
         }
         if (aux[i].awayTeam === null) {
-          aux[i].awayTeam = "Qualy Pending";
+          aux[i].awayTeam = "Qualy Pending"
         }
 
         const winner = async () => {
           if (aux[i].homeTeam === null || aux[i].awayTeam === null) {
-            return "Quali Pending";
+            return "Quali Pending"
           } else if (aux[i].goalHome > aux[i].goalAway) {
-            return aux[i].homeTeam;
+            return aux[i].homeTeam
           } else if (aux[i].goalHome < aux[i].goalAway) {
-            return aux[i].awayTeam;
-          } else return "Draw";
-        };
+            return aux[i].awayTeam
+          } else return "Draw"
+        }
 
         fetch("http://localhost:3000/pronosticos", {
           method: "POST",
@@ -129,43 +130,43 @@ export default function Pronostico(props) {
             awayTeam: aux[i],
             userId: /*props.*/ id || userLogged.id,
           }),
-        });
+        })
 
         //setDisable(true);
       }
       setResults([
         { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
-      ]);
-      console.log(aux);
-      console.log("Pronostico Enviado");
+      ])
+      console.log(aux)
+      console.log("Pronostico Enviado")
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
   async function handleChange(e, i, id, home, away) {
-    const { name, value } = e.target;
-    console.log(e.target.value);
+    const { name, value } = e.target
+    console.log(e.target.value)
 
-    const list = [...results, {}];
+    const list = [...results, {}]
 
-    const list2 = (prev) => [...results];
+    const list2 = prev => [...results]
 
-    list[i][name] = value;
+    list[i][name] = value
 
-    list[i]["matchId"] = id;
-    list[i]["homeTeam"] = home;
-    list[i]["awayTeam"] = away;
-    console.log("LIST", list);
-    setTest(list2);
-    console.log("TEST", test);
-    setResults(list);
+    list[i]["matchId"] = id
+    list[i]["homeTeam"] = home
+    list[i]["awayTeam"] = away
+    console.log("LIST", list)
+    setTest(list2)
+    console.log("TEST", test)
+    setResults(list)
   }
 
   function carrouselElement(group) {
     const groupX = /*props.*/ groupMatches.filter(
-      (matches) => matches.group === "GROUP_" + `${group}`
-    );
+      matches => matches.group === "GROUP_" + `${group}`
+    )
 
     return (
       /*props.*/ teams &&
@@ -177,8 +178,8 @@ export default function Pronostico(props) {
               className="home-img"
               src={
                 /*props.*/ getImg
-                  .filter((img) => img.id === match.homeTeam.id)
-                  .map((url) => url.url)
+                  .filter(img => img.id === match.homeTeam.id)
+                  .map(url => url.url)
               }
             />
             <h4>{match.homeTeam.name}</h4>
@@ -186,7 +187,7 @@ export default function Pronostico(props) {
               className="input-pronosticos"
               name="goalHome"
               value={results.goalHome}
-              onChange={(e) =>
+              onChange={e =>
                 handleChange(
                   e,
                   i,
@@ -203,15 +204,15 @@ export default function Pronostico(props) {
               className="home-img"
               src={
                 /*props.*/ getImg
-                  .filter((img) => img.id === match.awayTeam.id)
-                  .map((url) => url.url)
+                  .filter(img => img.id === match.awayTeam.id)
+                  .map(url => url.url)
               }
             />
             <input
               className="input-pronosticos"
               name="goalAway"
               value={results.goalAway}
-              onChange={(e) =>
+              onChange={e =>
                 handleChange(
                   e,
                   i,
@@ -224,23 +225,30 @@ export default function Pronostico(props) {
           </li>
         </>
       ))
-    );
+    )
   }
 
   return userLogged && groupMatches ? (
     <header className="masthead">
       <Navigation />
       <Carousel interval={null}>
-        {groups.map((group) => (
+        {groups.map(group => (
           <Carousel.Item>
-            <div className="containerCarrousel">
+            <div className="containerCarrousel carrusel">
               <h2>
                 {"GRUPO"} {group}
               </h2>
               <ul>{carrouselElement(group)}</ul>
-              <button disabled={disable} onClick={handleSubmit}>
-                Enviar
-              </button>
+              <div className="cajaBoton">
+                <button
+                  disabled={disable}
+                  onClick={handleSubmit}
+                  className="btn btn-outline-light mt-5 p-30 w-25 btnEnviar"
+                  id="btnEnviar"
+                >
+                  Enviar
+                </button>
+              </div>
             </div>
           </Carousel.Item>
         ))}
@@ -248,5 +256,5 @@ export default function Pronostico(props) {
     </header>
   ) : (
     <Navigate to="/login" />
-  );
+  )
 }
