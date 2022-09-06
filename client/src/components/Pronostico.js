@@ -1,5 +1,5 @@
 import { useState, useContext } from "react"
-import { useLocation } from "react-router-dom"
+// import { useLocation } from "react-router-dom"
 import "../App.css"
 import "../css/pronostico.css"
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -217,7 +217,7 @@ export default function Pronostico(props) {
 
   function carrouselElement(group) {
     const groupX = /*props.*/ groupMatches.filter(
-      matches => matches.group === "GROUP_" + `${group}`
+      matches => matches.group === `GROUP_${group}`
     )
 
     return (
