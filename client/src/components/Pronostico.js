@@ -174,54 +174,60 @@ export default function Pronostico(props) {
       groupX.map((match, i) => (
         <>
           <li key={match.id} className="matches">
-            <img
-              className="home-img"
-              src={
-                /*props.*/ getImg
-                  .filter(img => img.id === match.homeTeam.id)
-                  .map(url => url.url)
-              }
-            />
-            <h4>{match.homeTeam.name}</h4>
-            <input
-              className="input-pronosticos"
-              name="goalHome"
-              value={results.goalHome}
-              onChange={e =>
-                handleChange(
-                  e,
-                  i,
-                  match.id,
-                  match.homeTeam.name,
-                  match.awayTeam.name
-                )
-              }
-            />
+            <div className="paisesIzquierda">
+              <img
+                className="home-img mr-3"
+                src={
+                  /*props.*/ getImg
+                    .filter(img => img.id === match.homeTeam.id)
+                    .map(url => url.url)
+                }
+              />
+              <h4 className="mr-3">{match.homeTeam.name}</h4>
+              <input
+                className="input-pronosticos"
+                name="goalHome"
+                value={results.goalHome}
+                onChange={e =>
+                  handleChange(
+                    e,
+                    i,
+                    match.id,
+                    match.homeTeam.name,
+                    match.awayTeam.name
+                  )
+                }
+              />
+            </div>
 
             <h4 className="vs-text">vs</h4>
-            <h4>{match.awayTeam.name}</h4>
-            <img
-              className="home-img"
-              src={
-                /*props.*/ getImg
-                  .filter(img => img.id === match.awayTeam.id)
-                  .map(url => url.url)
-              }
-            />
-            <input
-              className="input-pronosticos"
-              name="goalAway"
-              value={results.goalAway}
-              onChange={e =>
-                handleChange(
-                  e,
-                  i,
-                  match.id,
-                  match.homeTeam.name,
-                  match.awayTeam.name
-                )
-              }
-            />
+
+            <div className="paisesDerecha">
+              <input
+                className="input-pronosticos"
+                name="goalAway"
+                value={results.goalAway}
+                onChange={e =>
+                  handleChange(
+                    e,
+                    i,
+                    match.id,
+                    match.homeTeam.name,
+                    match.awayTeam.name
+                  )
+                }
+              />
+
+              <h4 className="ml-3">{match.awayTeam.name}</h4>
+              <img
+                className="home-img ml-3"
+                src={
+                  /*props.*/ getImg
+                    .filter(img => img.id === match.awayTeam.id)
+                    .map(url => url.url)
+                }
+              />
+            </div>
           </li>
         </>
       ))
@@ -238,17 +244,19 @@ export default function Pronostico(props) {
               <h2>
                 {"GRUPO"} {group}
               </h2>
-              <ul>{carrouselElement(group)}</ul>
-              <div className="cajaBoton">
-                <button
-                  disabled={disable}
-                  onClick={handleSubmit}
-                  className="btn btn-outline-light mt-5 p-30 w-25 btnEnviar"
-                  id="btnEnviar"
-                >
-                  Enviar
-                </button>
-              </div>
+              <ul>
+                {carrouselElement(group)}
+                <div className="cajaBoton">
+                  <button
+                    disabled={disable}
+                    onClick={handleSubmit}
+                    className="btn btn-outline-light mt-5 p-30 w-25 btnEnviar"
+                    id="btnEnviar"
+                  >
+                    Enviar
+                  </button>
+                </div>
+              </ul>
             </div>
           </Carousel.Item>
         ))}
