@@ -182,6 +182,7 @@ export default function Pronostico(props) {
                     .filter(img => img.id === match.homeTeam.id)
                     .map(url => url.url)
                 }
+                alt=""
               />
               <h4 className="mr-3">{match.homeTeam.name}</h4>
               <input
@@ -226,6 +227,7 @@ export default function Pronostico(props) {
                     .filter(img => img.id === match.awayTeam.id)
                     .map(url => url.url)
                 }
+                alt=""
               />
             </div>
           </li>
