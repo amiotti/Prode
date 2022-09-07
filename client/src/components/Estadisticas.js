@@ -2,12 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import GroupStats from "./GroupStats";
 import Navigation from "./Navigation";
 import axios from "axios";
+import "../App.css";
 import AuthVerify from "../common/AuthVerify";
 import { UserContext } from "./Context";
 
 export default function Estadisticas() {
   const userLogged = AuthVerify();
-
   const { groupData } = useContext(UserContext);
 
   return (

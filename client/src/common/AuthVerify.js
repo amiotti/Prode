@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import TokenServices from "../services/token.services";
 
@@ -10,7 +9,7 @@ const parseJwt = (token) => {
   }
 };
 
-const AuthVerify = (props) => {
+const AuthVerify = () => {
   const navigate = useNavigate();
 
   const user = TokenServices.getLocalAccessToken(); //localStorage.getItem("user");

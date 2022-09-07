@@ -6,12 +6,12 @@ import AuthVerify from "../common/AuthVerify";
 import { UserContext } from "./Context";
 
 function Masthead() {
-  //const userLogged = TokenServices.getLocalAccessToken(); //localStorage.getItem("accessToken");
-
   //verify if actual token is expired
   const userLogged = AuthVerify();
 
-  // const { state } = useLocation();
+  const { id, setId, groupMatches } = useContext(UserContext);
+
+  //const { state } = useLocation();
   // let userId;
   // state ? (userId = state.id) : (userId = undefined);
 
@@ -86,9 +86,8 @@ function Masthead() {
   // }, []);
 
   useEffect(() => {
-    setId(userLogged.id);
+    !userLogged ? setId(false) : setId(userLogged.id);
   }, []);
-  const { id, setId, groupMatches } = useContext(UserContext);
 
   return userLogged && groupMatches ? (
     <>

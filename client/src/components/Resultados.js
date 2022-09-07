@@ -86,7 +86,7 @@ const Resultados = () => {
             {users &&
               table.map((table) => (
                 <>
-                  <tr>
+                  <tr key={table.userId}>
                     <td>{table.userId}</td>
                     <td>
                       {users.filter((user) => user.id === table.userId)[0].name}{" "}

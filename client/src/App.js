@@ -15,6 +15,7 @@ import moment from "moment";
 import UserService from "./services/user.services";
 import Estadisticas from "./components/Estadisticas";
 import axios from "axios";
+import Navigation from "./components/Navigation";
 
 function App() {
   const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
@@ -23,7 +24,7 @@ function App() {
   const urlFlags = "https://flagcdn.com/en/codes.json";
   const urlFlagFormat = "https://flagcdn.com/32x24/";
   const urlStatics =
-    "http://api.football-data.org/v2/competitions/WC/standings";
+    "https://api.football-data.org/v2/competitions/WC/standings";
   const stage = [
     "GROUP_STAGE",
     "LAST_16",
@@ -222,41 +223,48 @@ function App() {
   }, []);
 
   return (
-    <UserContext.Provider
-      value={{
-        id,
-        setId,
-        today,
-        setToday,
-        teams,
-        groupMatches,
-        getImg,
-        users,
-        table,
-        loading,
-        loading2,
-        groupData,
-      }}
-    >
-      <>
-        <div id="page-top">
-          <Router>
-            <Routes>
-              {/* <Navigation /> */}
-              <Route path="/login" element={<Login />} />
-              <Route exact path={`/`} element={<Masthead />} />
-              <Route exact path="/resultados" element={<Resultados />} />
-              <Route exact path="/registro" element={<Registration />} />
-              <Route exact path="/suscripcion" element={<Suscripcion />} />
-              <Route exact path="/fechas" element={<Fechas />} />
-              <Route exact path="/pronosticos" element={<Pronostico />} />
-              <Route exact path="/estadisticas" element={<Estadisticas />} />
-              <Route exact path="/contacto" element={<Contact />} />
-            </Routes>
-          </Router>
-        </div>
-      </>
-    </UserContext.Provider>
+    groupMatches &&
+    today &&
+    table &&
+    users &&
+    teams &&
+    getImg &&
+    groupData && (
+      <UserContext.Provider
+        value={{
+          groupData,
+          id,
+          setId,
+          today,
+          setToday,
+          teams,
+          groupMatches,
+          getImg,
+          users,
+          table,
+          loading,
+          loading2,
+        }}
+      >
+        <>
+          <div id="page-top">
+            <Router>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route exact path={`/`} element={<Masthead />} />
+                <Route exact path="/resultados" element={<Resultados />} />
+                <Route exact path="/registro" element={<Registration />} />
+                <Route exact path="/suscripcion" element={<Suscripcion />} />
+                <Route exact path="/fechas" element={<Fechas />} />
+                <Route exact path="/pronosticos" element={<Pronostico />} />
+                <Route exact path="/estadisticas" element={<Estadisticas />} />
+                <Route exact path="/contacto" element={<Contact />} />
+              </Routes>
+            </Router>
+          </div>
+        </>
+      </UserContext.Provider>
+    )
   );
 }
 

@@ -4,7 +4,7 @@ import Navigation from "./Navigation";
 import AuthVerify from "../common/AuthVerify";
 import { UserContext } from "./Context";
 
-export default function Fechas(props) {
+export default function Fechas() {
   const userLogged = AuthVerify();
   const { today, getImg } = useContext(UserContext);
 

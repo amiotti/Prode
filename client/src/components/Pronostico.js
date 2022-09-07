@@ -8,7 +8,7 @@ import Navigation from "./Navigation";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "./Context";
 
-export default function Pronostico(props) {
+export default function Pronostico() {
   const userLogged = AuthVerify();
 
   //const location = useLocation();
