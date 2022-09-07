@@ -45,7 +45,9 @@ function Navigation() {
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" /*href="#about"*/>Reglas</a>
+                <Link to="/estadisticas">
+                  <a className="nav-link" /*href="#about"*/>Estadisticas</a>
+                </Link>
               </li>
               <li className="nav-item">
                 <Link to="/resultados">
