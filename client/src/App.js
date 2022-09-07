@@ -13,6 +13,8 @@ import Contact from "./components/Contact";
 import { UserContext } from "./components/Context";
 import moment from "moment";
 import UserService from "./services/user.services";
+import Estadisticas from "./components/Estadisticas";
+import axios from "axios";
 
 function App() {
   const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
@@ -20,6 +22,8 @@ function App() {
   const urlTeams = "https://api.football-data.org/v2/competitions/WC/teams";
   const urlFlags = "https://flagcdn.com/en/codes.json";
   const urlFlagFormat = "https://flagcdn.com/32x24/";
+  const urlStatics =
+    "http://api.football-data.org/v2/competitions/WC/standings";
   const stage = [
     "GROUP_STAGE",
     "LAST_16",
@@ -38,6 +42,7 @@ function App() {
   const [table, setTable] = useState({});
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [groupData, setGroupData] = useState([]);
 
   const getFlags = async (name) => {
     const flags = await fetch(urlFlags);
@@ -197,6 +202,25 @@ function App() {
     getUsers();
   }, []);
 
+  //for Estadisticas.js
+  useEffect(() => {
+    const infoFetched = async () => {
+      try {
+        const fetchData = await axios.get(urlStatics, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "X-Auth-Token": `${apiToken}`,
+          },
+        });
+        setGroupData(fetchData.data.standings);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    infoFetched();
+  }, []);
+
   return (
     <UserContext.Provider
       value={{
@@ -211,6 +235,7 @@ function App() {
         table,
         loading,
         loading2,
+        groupData,
       }}
     >
       <>
@@ -225,7 +250,7 @@ function App() {
               <Route exact path="/suscripcion" element={<Suscripcion />} />
               <Route exact path="/fechas" element={<Fechas />} />
               <Route exact path="/pronosticos" element={<Pronostico />} />
-
+              <Route exact path="/estadisticas" element={<Estadisticas />} />
               <Route exact path="/contacto" element={<Contact />} />
             </Routes>
           </Router>

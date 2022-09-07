@@ -18,9 +18,6 @@ export default function Pronostico(props) {
   const [results, setResults] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
   ]);
-  const [test, setTest] = useState([
-    { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
-  ]);
 
   const groups = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const [disable, setDisable] = useState(false);
@@ -85,16 +82,12 @@ export default function Pronostico(props) {
 
     const list = [...results, {}];
 
-    const list2 = (prev) => [...results];
-
     list[i][name] = value;
 
     list[i]["matchId"] = id;
     list[i]["homeTeam"] = home;
     list[i]["awayTeam"] = away;
-    console.log("LIST", list);
-    setTest(list2);
-    console.log("TEST", test);
+
     setResults(list);
   }
 
