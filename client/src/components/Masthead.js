@@ -12,79 +12,9 @@ function Masthead() {
 
   const { id, setId, groupMatches } = useContext(UserContext);
 
-  //const { state } = useLocation();
-  // let userId;
-  // state ? (userId = state.id) : (userId = undefined);
-
-  // const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
-  // const urlMatches = "https://api.football-data.org/v2/competitions/WC/matches";
-  // const urlTeams = "https://api.football-data.org/v2/competitions/WC/teams";
-  // const urlFlags = "https://flagcdn.com/en/codes.json";
-  // const urlFlagFormat = "https://flagcdn.com/32x24/";
-  // const stage = [
-  //   "GROUP_STAGE",
-  //   "LAST_16",
-  //   "QUARTER_FINALS",
-  //   "SEMI_FINALS",
-  //   "FINAL",
-  // ];
-
-  // const [teams, setTeams] = useState([]);
-  // const [matches, setMatches] = useState([]);
-  // const [groupMatches, setGroupMatches] = useState([]);
-  // const [getImg, setGetImg] = useState("");
-
-  // const getFlags = async (name) => {
-  //   const flags = await fetch(urlFlags);
-  //   const data = await flags.json();
-  //   const list = Object.entries(data);
-  //   const code = list.filter((flag) => flag[1] === name)[0][0];
-
-  //   return code;
-  // };
-
-  // useEffect(() => {
-  //   const fetchMatches = async () => {
-  //     try {
-  //       const response = await fetch(urlMatches, {
-  //         headers: { "X-Auth-Token": `${apiToken}` },
-  //       });
-
-  //       const json = await response.json();
-
-  //       setMatches(await json);
-  //       setGroupMatches(
-  //         await json.matches.filter((matches) => matches.stage === stage[0])
-  //       );
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchMatches();
-
-  //   const fetchTeams = async () => {
-  //     try {
-  //       const response2 = await fetch(urlTeams, {
-  //         headers: { "X-Auth-Token": `${apiToken}` },
-  //       });
-  //       const json2 = await response2.json();
-  //       console.log(json2);
-  //       setTeams(await json2);
-
-  //       const codeState = json2.teams.map(async (url) => ({
-  //         id: url.id,
-  //         url: urlFlagFormat + (await getFlags(url.name)) + ".png",
-  //       }));
-
-  //       const flagURL = await Promise.all(codeState);
-
-  //       setGetImg(flagURL);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchTeams();
-  // }, []);
+  useEffect(() => {
+    !userLogged ? setId(false) : setId(userLogged.id);
+  }, []);
 
   useEffect(() => {
     !userLogged ? setId(false) : setId(userLogged.id);
