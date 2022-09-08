@@ -22,7 +22,7 @@ export default function Pronostico() {
   ])
 
   const groups = ["A", "B", "C", "D", "E", "F", "G", "H"]
-  const [disable, setDisable] = useState(false)
+  const [disable, setDisable] = useState(true)
 
   async function handleSubmit(e) {
     e.preventDefault()
