@@ -29,9 +29,9 @@ const login = async (email, password) => {
   return response.data;
 };
 
-const signup = async (names, lastname, sector, email, password) => {
+const signup = async (name, lastname, sector, email, password) => {
   const signUp = await api.post("/signup", {
-    names,
+    name,
     lastname,
     sector,
     email,

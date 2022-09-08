@@ -1,22 +1,17 @@
-import { useState, useEffect, useContext } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { useEffect, useContext } from "react";
+import { Navigate } from "react-router-dom";
 import "../App.css";
-import Contact from "./Contact";
 import Navigation from "./Navigation";
-import Pronostico from "./Pronostico";
-import Fechas from "./Fechas";
-import Resultados from "./Resultados";
 import AuthVerify from "../common/AuthVerify";
-import TokenServices from "../services/token.services";
 import { UserContext } from "./Context";
 
 function Masthead() {
-  //const userLogged = TokenServices.getLocalAccessToken(); //localStorage.getItem("accessToken");
-
   //verify if actual token is expired
   const userLogged = AuthVerify();
 
-  // const { state } = useLocation();
+  const { id, setId, groupMatches } = useContext(UserContext);
+
+  //const { state } = useLocation();
   // let userId;
   // state ? (userId = state.id) : (userId = undefined);
 
@@ -91,9 +86,8 @@ function Masthead() {
   // }, []);
 
   useEffect(() => {
-    setId(userLogged.id);
+    !userLogged ? setId(false) : setId(userLogged.id);
   }, []);
-  const { id, setId, groupMatches } = useContext(UserContext);
 
   return userLogged && groupMatches ? (
     <>

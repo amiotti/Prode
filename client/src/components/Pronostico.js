@@ -193,13 +193,10 @@ export default function Pronostico() {
 
     const list = [...results, {}]
 
-    list[i][name] = value
-
     list[i]["matchId"] = id
     list[i]["homeTeam"] = home
     list[i]["awayTeam"] = away
-    // console.log("LIST", list)
-    // console.log("TEST", test)
+
     setResults(list)
   }
 
