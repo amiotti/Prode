@@ -211,7 +211,6 @@ function App() {
         const fetchData = await axios.get(urlStatics, {
           headers: {
             "Content-Type": "application/json",
-
             "X-Auth-Token": `${apiToken}`,
           },
         });
