@@ -10,11 +10,7 @@ import { UserContext } from "./Context";
 
 export default function Pronostico() {
   const userLogged = AuthVerify();
-
-  //const location = useLocation();
-  //const { id, groupMatches, teams, getImg } = location.state || {}; // empty object is to avoid destructuring of null error
   const { id, teams, groupMatches, getImg } = useContext(UserContext);
-
   const [results, setResults] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
   ]);
@@ -78,7 +74,6 @@ export default function Pronostico() {
 
   async function handleChange(e, i, id, home, away) {
     const { name, value } = e.target;
-    console.log(e.target.value);
 
     const list = [...results, {}];
 
