@@ -18,6 +18,7 @@ const Users = db.define("users", {
   password: { type: DataTypes.STRING, allowNull: false },
   points: { type: DataTypes.INTEGER, defaultValue: 0 },
   suscripcion: { type: DataTypes.BOOLEAN, defaultValue: false },
+  // pronostico: { type: DataTypes.BOOLEAN, defaultValue: false },
   preference_id: { type: DataTypes.STRING },
 });
 
