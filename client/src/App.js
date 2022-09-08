@@ -15,6 +15,7 @@ import moment from "moment";
 import UserService from "./services/user.services";
 import Estadisticas from "./components/Estadisticas";
 import axios from "axios";
+import Navigation from "./components/Navigation";
 
 function App() {
   const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
