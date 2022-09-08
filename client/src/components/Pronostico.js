@@ -10,19 +10,14 @@ import { UserContext } from "./Context"
 
 export default function Pronostico() {
   const userLogged = AuthVerify()
-
-  const [inputsResults, setinputsResults] = useState([])
-
-  //const location = useLocation();
-  //const { id, groupMatches, teams, getImg } = location.state || {}; // empty object is to avoid destructuring of null error
   const { id, teams, groupMatches, getImg } = useContext(UserContext)
-
   const [results, setResults] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
   ])
 
   const groups = ["A", "B", "C", "D", "E", "F", "G", "H"]
   const [disable, setDisable] = useState(true)
+  const [inputsResults, setinputsResults] = useState([])
 
   async function handleSubmit(e) {
     e.preventDefault()

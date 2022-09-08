@@ -1,18 +1,24 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import GroupStats from "./GroupStats";
 import Navigation from "./Navigation";
-import axios from "axios";
 import "../App.css";
 import AuthVerify from "../common/AuthVerify";
 import { UserContext } from "./Context";
+import { useNavigate } from "react-router-dom";
 
 export default function Estadisticas() {
   const userLogged = AuthVerify();
   const { groupData } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userLogged) {
+      navigate("/login");
+    }
+  }, []);
 
   return (
-    groupData &&
-    userLogged && (
+    groupData && (
       <>
         <Navigation />
         <header className="masthead">

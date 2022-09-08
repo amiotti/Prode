@@ -4756,7 +4756,9 @@ textarea.form-control-lg {
 
 .input-pronosticos {
   padding:1%;
-  width:10%
+  width:10%;
+  border-radius: 30%;
+  border-color: white;
 }
 
 .accordion-item {

@@ -1,8 +1,6 @@
 import "../App.css"
 import { Link, useNavigate } from "react-router-dom"
 import TokenServices from "../services/token.services"
-// import { useContext } from "react";
-// import { UserContext } from "./Context";
 import AuthVerify from "../common/AuthVerify"
 
 function Navigation() {

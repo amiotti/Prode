@@ -1,21 +1,30 @@
-import React, { Navigate, useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import moment from "moment";
 import Navigation from "./Navigation";
 import AuthVerify from "../common/AuthVerify";
 import { UserContext } from "./Context";
+import { useNavigate } from "react-router-dom";
 
 export default function Fechas() {
   const userLogged = AuthVerify();
   const { today, getImg } = useContext(UserContext);
+  const navigate = useNavigate();
 
-  return userLogged ? (
-    today && (
+  useEffect(() => {
+    if (!userLogged) {
+      navigate("/login");
+    }
+  }, []);
+
+  return (
+    today &&
+    getImg && (
       <header className="masthead">
         <Navigation />
         <div className="container px-4 px-lg-5 h-100">
           <h2 className="mt-0">
-            Today´s Match:
-            {<span>{moment(today[0].utcDate).format(" MMM d, yyyy")}</span>}
+            Partidos de Hoy:
+            {<span>{moment(today[0].utcDate).format(" d MMM , yyyy")}</span>}
           </h2>
 
           <ul>
@@ -44,7 +53,5 @@ export default function Fechas() {
         </div>
       </header>
     )
-  ) : (
-    <Navigate to="/login" />
   );
 }

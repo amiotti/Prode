@@ -4,18 +4,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .paisesIzquierda {
   width: 100%;
   display: flex;
-  justify-content: end;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .paisesDerecha {
   width: 100%;
   display: flex;
-  justify-content: start;
+ 
+  justify-content: space-between;
+  align-items: center;
 }
 
 .cajaBoton {

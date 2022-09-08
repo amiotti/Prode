@@ -15,7 +15,6 @@ import moment from "moment";
 import UserService from "./services/user.services";
 import Estadisticas from "./components/Estadisticas";
 import axios from "axios";
-import Navigation from "./components/Navigation";
 
 function App() {
   const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
@@ -107,6 +106,7 @@ function App() {
           headers: { "X-Auth-Token": `${apiToken}` },
         });
         const partidos = await data.json();
+        console.log("PARTIDOS", partidos);
 
         setToday(
           await partidos.matches.filter(
@@ -132,6 +132,7 @@ function App() {
         const response = await fetch("http://localhost:3000/pronosticos");
 
         const bets = await response.json();
+        console.log("RESULTADOS", bets);
         let ids = await bets.map((bet) => bet.userId);
         let uniqueIds = [...new Set(ids)];
         let obj = [];
@@ -229,6 +230,8 @@ function App() {
     users &&
     teams &&
     getImg &&
+    loading &&
+    loading2 &&
     groupData && (
       <UserContext.Provider
         value={{
