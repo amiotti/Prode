@@ -24,7 +24,7 @@ export default function Pronostico(props) {
   const [test, setTest] = useState([
     { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
   ])
-  const [disable, setDisable] = useState(false)
+  const [disable, setDisable] = useState(true)
 
   const groups = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
@@ -203,9 +203,18 @@ export default function Pronostico(props) {
             }
 
             if (isAddedResult) {
-              console.log("Si hay resultado agregado")
+              for (let index = 0; index < iterator.results.length; index++) {
+                if (id === iterator.results[index].matchId) {
+                  if (name === "goalHome") {
+                    iterator.results[index].homeValue = value
+                    break
+                  } else {
+                    iterator.results[index].awayValue = value
+                    break
+                  }
+                }
+              }
             } else {
-              console.log("Nuevo resultado")
               iterator.results.push({
                 matchId: id,
                 homeTeam: home,
@@ -213,11 +222,41 @@ export default function Pronostico(props) {
                 awayTeam: away,
                 awayValue,
               })
-              console.log(iterator.results)
+              break
             }
           }
         }
       }
+    }
+
+    let isNumber = true
+    for (const iterator of inputsResults) {
+      if (iterator.group === group) {
+        if (iterator.results.length === 6) {
+          for (const iterator2 of iterator.results) {
+            console.log(`homeValue: ${iterator2.homeValue}`)
+            console.log(`awayValue: ${parseInt(iterator2.awayValue)}`)
+            if (
+              !parseInt(iterator2.homeValue) &&
+              parseInt(iterator2.homeValue) !== 0
+            ) {
+              isNumber = false
+            } else if (
+              !parseInt(iterator2.awayValue) &&
+              parseInt(iterator2.awayValue) !== 0
+            ) {
+              isNumber = false
+            }
+          }
+        } else {
+          isNumber = false
+        }
+      }
+    }
+
+    if (isNumber) {
+      const btnEnviar = document.querySelector(`#btnEnviar${group}`)
+      btnEnviar.disabled = false
     }
 
     const list = [...results, {}]
@@ -327,7 +366,7 @@ export default function Pronostico(props) {
                     disabled={disable}
                     onClick={handleSubmit}
                     className="btn btn-outline-light mt-5 p-30 w-25 btnEnviar"
-                    id="btnEnviar"
+                    id={`btnEnviar${group}`}
                   >
                     Enviar
                   </button>
