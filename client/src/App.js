@@ -102,14 +102,8 @@ function App() {
       const hoy = moment(Date.now()).format("DD/MM/YYYY");
       const futuro = moment("2022-11-23T01:00:00-0300").format("DD/MM/YYYY");
       try {
-        const data = await fetch(urlMatches, {
-          headers: { "X-Auth-Token": `${apiToken}` },
-        });
-        const partidos = await data.json();
-        console.log("PARTIDOS", partidos);
-
         setToday(
-          await partidos.matches.filter(
+          await matches.matches.filter(
             (dia) => moment(dia.utcDate).format("DD/MM/YYYY") === futuro
           )
         );
@@ -206,7 +200,7 @@ function App() {
 
   //for Estadisticas.js
   useEffect(() => {
-    const infoFetched = async () => {
+    const fetchSatics = async () => {
       try {
         const fetchData = await axios.get(urlStatics, {
           headers: {
@@ -219,7 +213,7 @@ function App() {
         console.log(error.message);
       }
     };
-    infoFetched();
+    fetchSatics();
   }, []);
 
   return (

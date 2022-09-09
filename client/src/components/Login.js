@@ -55,7 +55,7 @@ export default function Login() {
     try {
       //POST to /signin
       const data = await authServices.login(email, password);
-
+      console.log("LOGIN", data);
       if (data.isLogged && data.suscripcion === true && data.accessToken) {
         //const loged = await tokenAvailable();
         navigate(`/`, { state: { /*token: loged, */ id: data.id } });
