@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "../App.css";
+import React from "react";
+import "../css/groupStats.css";
 
 export default function GroupStats({ info }) {
   return (
@@ -25,7 +24,8 @@ export default function GroupStats({ info }) {
             <tr key={el.team.id}>
               <th scope="row">{el.position}</th>
               <td>
-                {el.team.name} <img src={el.team.crestUrl}></img>
+                {el.team.name}{" "}
+                <img src={el.team.crestUrl} className="statsimg"></img>
               </td>
               <td>{el.points}</td>
               <td>{el.playedGames}</td>

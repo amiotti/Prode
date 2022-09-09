@@ -55,6 +55,8 @@ function App() {
 
   useEffect(() => {
     const fetchMatches = async () => {
+      const hoy = moment(Date.now()).format("DD/MM/YYYY");
+      const futuro = moment("2022-11-23T01:00:00-0300").format("DD/MM/YYYY");
       try {
         const response = await fetch(urlMatches, {
           headers: { "X-Auth-Token": `${apiToken}` },
@@ -63,6 +65,11 @@ function App() {
         const json = await response.json();
 
         setMatches(await json);
+        setToday(
+          await json.matches.filter(
+            (dia) => moment(dia.utcDate).format("DD/MM/YYYY") === futuro
+          )
+        );
         setGroupMatches(
           await json.matches.filter((matches) => matches.stage === stage[0])
         );
@@ -102,11 +109,11 @@ function App() {
       const hoy = moment(Date.now()).format("DD/MM/YYYY");
       const futuro = moment("2022-11-23T01:00:00-0300").format("DD/MM/YYYY");
       try {
-        setToday(
-          await matches.matches.filter(
-            (dia) => moment(dia.utcDate).format("DD/MM/YYYY") === futuro
-          )
-        );
+        // setToday(
+        //   await matches.matches.filter(
+        //     (dia) => moment(dia.utcDate).format("DD/MM/YYYY") === futuro
+        //   )
+        // );
       } catch (error) {
         console.log(error);
       }
@@ -218,6 +225,7 @@ function App() {
 
   return (
     groupMatches &&
+    matches &&
     today &&
     table &&
     users &&
