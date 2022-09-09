@@ -17,10 +17,6 @@ function Masthead() {
   }, []);
 
   useEffect(() => {
-    !userLogged ? setId(false) : setId(userLogged.id);
-  }, []);
-
-  useEffect(() => {
     if (!userLogged) {
       navigate("/login");
     }

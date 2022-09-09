@@ -22,6 +22,8 @@ function App() {
   const urlTeams = "https://api.football-data.org/v2/competitions/WC/teams";
   const urlFlags = "https://flagcdn.com/en/codes.json";
   const urlFlagFormat = "https://flagcdn.com/32x24/";
+  const urlPlayerStats =
+    "http://api.football-data.org/v2/competitions/WC/scorers";
   const urlStatics =
     "https://api.football-data.org/v2/competitions/WC/standings";
   const stage = [
@@ -43,6 +45,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [groupData, setGroupData] = useState([]);
+  const [scorers, setScorers] = useState({});
 
   const getFlags = async (name) => {
     const flags = await fetch(urlFlags);
@@ -223,7 +226,23 @@ function App() {
     fetchSatics();
   }, []);
 
+  useEffect(() => {
+    const fetchPlayerStats = async () => {
+      try {
+        const data = await axios.get(urlPlayerStats, {
+          headers: { "X-Auth-Token": `${apiToken}` },
+        });
+        const scorers = data.data.scorers;
+        setScorers(scorers);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchPlayerStats();
+  }, []);
+
   return (
+    scorers &&
     groupMatches &&
     matches &&
     today &&

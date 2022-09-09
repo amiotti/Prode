@@ -25,7 +25,11 @@ export default function GroupStats({ info }) {
               <th scope="row">{el.position}</th>
               <td>
                 {el.team.name}{" "}
-                <img src={el.team.crestUrl} className="statsimg"></img>
+                <img
+                  src={el.team.crestUrl}
+                  className="statsimg"
+                  alt={el.team.name}
+                ></img>
               </td>
               <td>{el.points}</td>
               <td>{el.playedGames}</td>
