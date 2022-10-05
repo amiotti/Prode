@@ -23,7 +23,8 @@ export default function GroupStats({ info }) {
           {info.table.map((el) => (
             <tr key={el.team.id}>
               <th scope="row">{el.position}</th>
-              <td>
+
+              <td className="td_name">
                 {el.team.name}{" "}
                 <img
                   src={el.team.crestUrl}
@@ -31,6 +32,7 @@ export default function GroupStats({ info }) {
                   alt={el.team.name}
                 ></img>
               </td>
+
               <td>{el.points}</td>
               <td>{el.playedGames}</td>
               <td>{el.goalsFor}</td>

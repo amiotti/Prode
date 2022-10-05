@@ -4,19 +4,27 @@ import "../App.css";
 import Navigation from "./Navigation";
 import AuthVerify from "../common/AuthVerify";
 import { UserContext } from "./Context";
+import TokenService from "../services/token.services";
 
 function Masthead() {
   //verify if actual token is expired
   const userLogged = AuthVerify();
   const navigate = useNavigate();
+  console.log("USERLOGGED", userLogged);
 
-  const { id, setId, groupMatches } = useContext(UserContext);
+  const { setId, groupMatches } = useContext(UserContext);
 
   useEffect(() => {
     !userLogged ? setId(false) : setId(userLogged.id);
-  }, []);
 
-  useEffect(() => {
+    // if (/*userLogged &&*/ !userLogged.suscription) {
+    //   navigate("/suscripcion");
+    //   // } else if (userLogged.suscription === false) {
+    //   //   navigate("/suscripcion", {
+    //   //     state: { preference_id: userLogged.preference },
+    //   //   });
+    // }
+
     if (!userLogged) {
       navigate("/login");
     }
@@ -36,14 +44,7 @@ function Masthead() {
                 <hr className="divider" />
               </div>
               <div className="col-lg-8 align-self-baseline">
-                <p className="text-white-75 mb-5">
-                  Start Bootstrap can help you build better websites using the
-                  Bootstrap framework! Just download a theme and start
-                  customizing, no strings attached!
-                </p>
-                <a className="btn btn-primary btn-xl" /*href="#about"*/>
-                  Find Out More
-                </a>
+                <p className="text-white-75 mb-5"></p>
               </div>
             </div>
           </div>

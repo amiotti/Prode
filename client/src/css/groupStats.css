@@ -3,3 +3,11 @@
     height: 50%;
 }
 
+/* .td_name{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: baseline;
+    flex-direction: row-reverse;
+    border-top: none;
+    border-bottom: none;   
+} */

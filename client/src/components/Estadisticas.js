@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from "react";
 import GroupStats from "./GroupStats";
 import Navigation from "./Navigation";
 import "../App.css";
+import "../css/estadisticas.css";
 import AuthVerify from "../common/AuthVerify";
 import { UserContext } from "./Context";
 import { useNavigate } from "react-router-dom";
@@ -22,28 +23,29 @@ export default function Estadisticas() {
     groupData && (
       <>
         <Navigation />
-
-        <header className="masthead">
-          <div className="container px-4 px-lg-5 h-100">
-            <div className="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
-              <div className="col-lg-8 align-self-end">
-                <h1>TABLA DE POSICIONES</h1>
-                <div>
-                  {groupData.map((group) => (
-                    <>
-                      <h2>{"GRUPO " + group.group.charAt(6)}</h2>
-                      <GroupStats info={group} />
-                    </>
-                  ))}
-                </div>
-                <h1>GOLEADORES</h1>
-                <div>
-                  <PlayerStats />
+        <div className="estadistica">
+          <header className="masthead">
+            <div className="container px-4 px-lg-5 h-100">
+              <div className="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+                <div className="col-lg-8 align-self-end">
+                  <h1>TABLA DE POSICIONES</h1>
+                  <div>
+                    {groupData.map((group) => (
+                      <>
+                        <h2>{"GRUPO " + group.group.charAt(6)}</h2>
+                        <GroupStats info={group} />
+                      </>
+                    ))}
+                  </div>
+                  <h1>GOLEADORES</h1>
+                  <div className="col-lg-8 align-self-end">
+                    <PlayerStats />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </header>
+          </header>
+        </div>
       </>
     )
   );
