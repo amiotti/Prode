@@ -1,16 +1,16 @@
-import "../App.css"
-import { Link, useNavigate } from "react-router-dom"
-import TokenServices from "../services/token.services"
-import AuthVerify from "../common/AuthVerify"
+import "../App.css";
+import { Link, useNavigate } from "react-router-dom";
+import TokenServices from "../services/token.services";
+import AuthVerify from "../common/AuthVerify";
 
 function Navigation() {
-  const userLogged = AuthVerify() //localStorage.getItem("accessToken");
-  const navigate = useNavigate()
+  const userLogged = AuthVerify(); //localStorage.getItem("accessToken");
+  const navigate = useNavigate();
 
   const handleLogOut = () => {
-    TokenServices.removeUser()
-    navigate("/login")
-  }
+    TokenServices.removeUser();
+    navigate("/login");
+  };
 
   //const { id, teams, groupMatches, getImg } = useContext(UserContext);
 
@@ -22,8 +22,10 @@ function Navigation() {
           id="mainNav"
         >
           <div className="container px-4 px-lg-5">
-            <h3 className="navbar-brand" /*href="#page-top"*/>
-              {userLogged.name} {userLogged.lastname}
+            <h3 className="navbar-brand_userName" /*href="#page-top"*/>
+              <Link to="/userinfo">
+                {userLogged.name} {userLogged.lastname}
+              </Link>
             </h3>
             <button
               className="navbar-toggler navbar-toggler-right"
@@ -86,7 +88,7 @@ function Navigation() {
         </nav>
       </>
     )
-  )
+  );
 }
 
-export default Navigation
+export default Navigation;

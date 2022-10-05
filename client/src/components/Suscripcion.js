@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import AuthVerify from "../common/AuthVerify";
 
 const FORM_ID = "payment-form";
 
-export default function Suscripcion(props) {
+export default function Suscripcion() {
   //const { id } = useParams(); // id de producto
   const id = 1122;
   const [preferenceId, setPreferenceId] = useState(null);
-  const { state } = useLocation();
-
+  const { state } = useLocation(); //for query URL params
+  const navigate = useNavigate();
+  const userLogged = AuthVerify();
+  console.log(state);
+  console.log(userLogged);
   const PUBLIC_KEY_VENDEDOR_PRUEBA =
     "TEST-001debb2-d8d5-40a4-953f-8ca65aaa0fa0";
+
+  useEffect(() => {
+    if (userLogged) {
+      setPreferenceId(userLogged.preference);
+    }
+  }, []);
 
   function addCheckOut() {
     const mp = new window.MercadoPago(PUBLIC_KEY_VENDEDOR_PRUEBA, {
@@ -31,37 +41,43 @@ export default function Suscripcion(props) {
     });
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     // luego de montarse el componente, le pedimos al backend el preferenceId
-    try {
-      if (!state.preference_id) {
-        const post = await fetch("http://localhost:3000/api/orders", {
-          method: "POST",
-          made: "cors",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: JSON.stringify({
-            productId: id,
-            name: state.name,
-            lastname: state.lastname,
-            email: state.email,
-          }),
-        });
+    //console.log("LOCATION", !state.preference_id);
+    const getPreferenceId = async () => {
+      try {
+        console.log("STATE", state);
+        if (/*!state.preference_id*/ !preferenceId) {
+          const post = await fetch("http://localhost:3000/api/orders", {
+            method: "POST",
+            made: "cors",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+            body: JSON.stringify({
+              productId: id,
+              name: state.name,
+              lastname: state.lastname,
+              email: state.email,
+            }),
+          });
 
-        const data = await post.json();
+          const data = await post.json();
 
-        setPreferenceId(await data.id);
+          setPreferenceId(await data.id);
+          //navigate("/login");
+        }
+      } catch (error) {
+        console.log(error.message);
       }
-    } catch (error) {
-      console.log(error.message);
-    }
+    };
+    getPreferenceId();
   }, []);
 
   useEffect(() => {
-    console.log(state.preference_id);
-    if (preferenceId || state.preference_id) {
+    console.log(preferenceId);
+    if (preferenceId /*|| state.preference_id*/) {
       // con el preferenceId en mano, inyectamos el script de mercadoPago
 
       const script = document.createElement("script");
@@ -74,7 +90,7 @@ export default function Suscripcion(props) {
       //   form.appendChild(script);
       document.body.appendChild(script);
     }
-  }, [preferenceId, state.preference_id]);
+  }, [preferenceId /*|| state.preference_id*/]);
 
-  return <form id={FORM_ID} method="GET" />;
+  return preferenceId && <form id={FORM_ID} method="GET" />;
 }

@@ -30,8 +30,12 @@ exports.signin = async (req, res) => {
 
   try {
     if (!user) {
-      return res.status(404).send({ message: "User Not found." });
+      return res.status(404).send({ message: "Usuario No Encontrado." });
     }
+
+    // if (!user.suscripcion) {
+    //   return res.status(404).send({ message: "Falta Suscripción." });
+    // }
 
     const passwordIsValid = bcrypt.compareSync(
       req.body.password,

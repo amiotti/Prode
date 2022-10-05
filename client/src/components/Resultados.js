@@ -10,7 +10,7 @@ const Resultados = () => {
   const navigate = useNavigate();
 
   const { users, table, loading, loading2 } = useContext(UserContext);
-
+  console.log("TABLE", table);
   useEffect(() => {
     if (!userLogged) {
       navigate("/login");
@@ -27,7 +27,7 @@ const Resultados = () => {
         <table className="table">
           <thead>
             <tr>
-              <th scope="col">USER ID</th>
+              <th scope="col">POS</th>
               <th scope="col">NOMBRE</th>
               <th scope="col">SECTOR</th>
               <th scope="col">PUNTOS</th>
@@ -35,10 +35,10 @@ const Resultados = () => {
           </thead>
           <tbody>
             {users &&
-              table.map((table) => (
+              table.map((table, i) => (
                 <>
                   <tr key={table.userId}>
-                    <td>{table.userId}</td>
+                    <td>{i + 1}</td>
                     <td>
                       {users.filter((user) => user.id === table.userId)[0].name}{" "}
                       {

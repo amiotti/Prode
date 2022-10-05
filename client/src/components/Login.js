@@ -6,6 +6,7 @@ import axios from "axios";
 import api from "../services/api";
 import UserService from "../services/user.services";
 import AuthVerify from "../common/AuthVerify";
+import TokenService from "../services/token.services";
 
 export default function Login() {
   const [user, setUser] = useState(false);
@@ -13,10 +14,18 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [getParams] = useSearchParams();
+  const userLogged = AuthVerify();
   const payment_id = getParams.get("payment_id");
   const status = getParams.get("status");
   const preference_id = getParams.get("preference_id");
-  const userLogged = AuthVerify();
+
+  console.log("LOGIN_USERLOGGED", userLogged);
+
+  useEffect(() => {
+    if (userLogged) {
+      navigate("/");
+    }
+  }, []);
 
   useEffect(() => {
     async function notify() {
@@ -34,13 +43,22 @@ export default function Login() {
               preference_id,
             }),
           });
+          const notificationObject = await post.json();
+          console.log("NOTIFY", notificationObject);
+
+          //Re loggin or u´date token?
+          if (notificationObject.suscripcion) {
+            navigate("/login");
+          }
+          //TokenService.setUser(post)
         } catch (error) {
           console.log(error.message);
         }
       }
     }
+
     notify();
-  }, []);
+  }, [payment_id]);
 
   async function tokenAvailable() {
     const userLogged = await UserService.getUserLogged();
@@ -58,11 +76,14 @@ export default function Login() {
       console.log("LOGIN", data);
       if (data.isLogged && data.suscripcion === true && data.accessToken) {
         //const loged = await tokenAvailable();
-        navigate(`/`, { state: { /*token: loged, */ id: data.id } });
+        //TokenService.removeUser();
+        navigate(`/`, { state: { id: data.id } });
       } else if (data.isLogged && data.suscripcion === false) {
-        navigate("/suscripcion", {
+        navigate(
+          "/suscripcion" /*, {
           state: { preference_id: data.preference_id },
-        });
+        }*/
+        );
       } else {
         window.alert("Invalid Login");
       }
@@ -80,7 +101,7 @@ export default function Login() {
       <div className="container px-4 px-lg-5">
         <div className="row gx-4 gx-lg-5 justify-content-center">
           <div className="col-lg-8 col-xl-6 text-center">
-            <h2 className="mt-0">LOGIN</h2>
+            <h1 className="mt-0">PRODE LBB</h1>
             <hr className="divider" />
             <p className="text-muted mb-5">
               Inicie sesión para poder ver sus resultados del PRODE
@@ -156,7 +177,6 @@ export default function Login() {
                   Registro
                 </button>
               </div>
-              <div className="d-grid"></div>
             </form>
           </div>
         </div>

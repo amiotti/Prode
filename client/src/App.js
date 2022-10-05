@@ -15,6 +15,7 @@ import moment from "moment";
 import UserService from "./services/user.services";
 import Estadisticas from "./components/Estadisticas";
 import axios from "axios";
+import UserInfo from "./components/UserInfo";
 
 function App() {
   const apiToken = "cfccda3b57e4496d884919c349c9f8a7";
@@ -46,6 +47,9 @@ function App() {
   const [loading2, setLoading2] = useState(false);
   const [groupData, setGroupData] = useState([]);
   const [scorers, setScorers] = useState({});
+  const [results, setResults] = useState([
+    { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
+  ]);
 
   const getFlags = async (name) => {
     const flags = await fetch(urlFlags);
@@ -178,8 +182,9 @@ function App() {
               points += 10;
             }
           }
-          obj.push({ userId: uniqueIds[j], points });
 
+          obj.push({ userId: uniqueIds[j], points });
+          console.log("OBJ", obj);
           //setTable(obj);
         }
 
@@ -206,7 +211,7 @@ function App() {
       }
     };
     getUsers();
-  }, []);
+  }, [results]);
 
   //for Estadisticas.js
   useEffect(() => {
@@ -252,10 +257,13 @@ function App() {
     getImg &&
     loading &&
     loading2 &&
-    groupData && (
+    groupData &&
+    results && (
       <UserContext.Provider
         value={{
           groupData,
+          results,
+          setResults,
           id,
           setId,
           today,
@@ -282,6 +290,7 @@ function App() {
                 <Route exact path="/pronosticos" element={<Pronostico />} />
                 <Route exact path="/estadisticas" element={<Estadisticas />} />
                 <Route exact path="/contacto" element={<Contact />} />
+                <Route exact path="/userinfo" element={<UserInfo />} />
               </Routes>
             </Router>
           </div>

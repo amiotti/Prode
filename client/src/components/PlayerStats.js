@@ -1,5 +1,6 @@
 import React from "react";
 import "../App.css";
+import "../css/playerstats.css";
 
 export default function PlayerStats() {
   const topScorers = {
@@ -330,7 +331,7 @@ export default function PlayerStats() {
           <th scope="col">Penales</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="estadistica">
         {topScorers.scorers.map((scorer, i) => (
           <tr>
             <th scope="row">{i + 1}</th>

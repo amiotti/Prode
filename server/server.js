@@ -20,15 +20,26 @@ require("../server/routes/user.routes")(app);
 
 app.post("/pronosticos", async (req, res) => {
   try {
-    await Pronostico.create({
-      matchId: req.body.matchId,
-      winner: req.body.winner,
-      goalHome: req.body.goalHome,
-      goalAway: req.body.goalAway,
-      userId: req.body.userId,
-    });
+    for (let i = 0; i < req.body.length; i++) {
+      const pronostico = await Pronostico.findOne({
+        where: { matchId: req.body[i].matchId, userId: req.body[i].userId },
+      });
+      console.log("PRONOSTICO", pronostico);
+      if (!pronostico || !{} || null) {
+        await Pronostico.create({
+          matchId: req.body[i].matchId,
+          winner: req.body[i].winner,
+          goalHome: req.body[i].goalHome,
+          goalAway: req.body[i].goalAway,
+          userId: req.body[i].userId,
+        });
+      } else {
+        console.log("YA ENVIASTE ESTE PRONOSTICO");
+        res.status(400).send({ message: "Ya enviaste este pronostico" });
+      }
+    }
 
-    res.send("Enviado");
+    res.status(200).send("Enviado");
   } catch (err) {
     console.log("ERROR en POST /pronosticos", err.message);
   }
@@ -57,6 +68,7 @@ app.post("/contact", async (req, res) => {
 mercadopago.configure({ access_token: ACCESS_TOKEN_PRUEBA });
 
 app.post("/api/orders", (req, res) => {
+  console.log("REQ.>BODY", req.body);
   const preference = {
     items: [
       {
@@ -75,6 +87,7 @@ app.post("/api/orders", (req, res) => {
     auto_return: "approved",
   };
 
+  console.log("ORDERs", preference);
   mercadopago.preferences.create(preference).then(async (preference) => {
     const payer = preference.body.payer.email;
 
@@ -86,7 +99,7 @@ app.post("/api/orders", (req, res) => {
     await user.save();
     //console.log(await user);
 
-    res.send(preference.body);
+    res.status(200).send(preference.body);
   });
 });
 
@@ -94,11 +107,14 @@ app.post("/notify", async (req, res) => {
   const user = await Users.findOne({
     where: { preference_id: req.body.preference_id },
   });
+
   if (user) {
     await user.set({ suscripcion: true });
+    //UPDATE TOKEN HERE?
     await user.save();
   }
-  res.send("APPROVED");
+
+  res.status(200).send(await user);
 });
 
 //SERVER AND DATABASE CONNECTION

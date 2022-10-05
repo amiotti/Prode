@@ -10,10 +10,11 @@ import { UserContext } from "./Context";
 
 export default function Pronostico() {
   const userLogged = AuthVerify();
-  const { id, teams, groupMatches, getImg } = useContext(UserContext);
-  const [results, setResults] = useState([
-    { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
-  ]);
+  const { id, teams, groupMatches, getImg, results, setResults } =
+    useContext(UserContext);
+  // const [results, setResults] = useState([
+  //   { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
+  // ]);
   const groups = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const [disable, setDisable] = useState(true);
   const [inputsResults, setinputsResults] = useState([]);
@@ -29,16 +30,33 @@ export default function Pronostico() {
     e.preventDefault();
 
     try {
+      const winner = (el) => {
+        if (el.homeTeam === null || el.awayTeam === null) {
+          return "Quali Pending";
+        } else if (el.goalHome > el.goalAway) {
+          return el.homeTeam;
+        } else if (el.goalHome < el.goalAway) {
+          return el.awayTeam;
+        } else return "Draw";
+      };
       const aux = [];
-      for (let i = 0; i < 6; i++) {
-        aux.push(results[i]);
 
-        if (aux[i].homeTeam === null) {
-          aux[i].homeTeam = "Qualy Pending";
-        }
-        if (aux[i].awayTeam === null) {
-          aux[i].awayTeam = "Qualy Pending";
-        }
+      results.map((el) =>
+        aux.push({
+          matchId: el.matchId,
+          winner: winner(el),
+          goalHome: el.goalHome,
+          goalAway: el.goalAway,
+          homeTeam: el.homeTeam,
+          awayTeam: el.awayTeam,
+          userId: /*props.*/ id || userLogged.id,
+        })
+      );
+      for (let i = 0; i < 6; i++) {
+        //console.log("results", results[i]);
+
+        //aux= [{awayTeam: "Ecuador", goalAway: "2", goalHome: "1",homeTeam:"Qatar"]
+        //console.log("AUX", aux[i]);
 
         const winner = async () => {
           if (aux[i].homeTeam === null || aux[i].awayTeam === null) {
@@ -50,29 +68,46 @@ export default function Pronostico() {
           } else return "Draw";
         };
 
-        fetch("http://localhost:3000/pronosticos", {
-          method: "POST",
-          made: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            matchId: aux[i].matchId,
-            winner: await winner(),
-            goalHome: aux[i].goalHome,
-            goalAway: aux[i].goalAway,
-            homeTeam: aux[i],
-            awayTeam: aux[i],
-            userId: /*props.*/ id || userLogged.id,
-          }),
-        });
+        // console.log("TEST", {
+        //   awayTeam: results[i],
+        //   userId: /*props.*/ id || userLogged.id,
+        // });
+
+        // TEST {matchId:391882,winner:eCUADOR}
+
+        // obj.push({
+        // matchId: results[i].matchId,
+        // winner: await winner(),
+        // goalHome: results[i].goalHome,
+        // goalAway: results[i].goalAway,
+        // homeTeam: results[i].homeTeam,
+        // awayTeam: results[i].awayTeam,
+        // userId: /*props.*/ id || userLogged.id,
+        // });
+
+        //console.log(sendData);
+        // if (sendData) {
+        //   alert("Ya enviaste este pronostico");
+        // }
+        //console.log(sendData);
 
         //setDisable(true);
       }
+      //console.log("OBJ", obj);
+      console.log("AUX", aux);
+      const sendData = await fetch("http://localhost:3000/pronosticos", {
+        method: "POST",
+        made: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(aux),
+      });
+      console.log("SENDDATA", sendData);
       setResults([
         { goalHome: "", goalAway: "", matchId: "", homeTeam: "", awayTeam: "" },
       ]);
-      console.log(aux);
+
       console.log("Pronostico Enviado");
     } catch (error) {
       console.log(error);
@@ -80,7 +115,6 @@ export default function Pronostico() {
   }
   async function handleChange(e, i, id, home, away, group) {
     const { name, value } = e.target;
-    console.log(e.target.value);
 
     /* -------------------------------------------------------------------------- */
     /*        Validando los inputs con el botón habilitado o deshabilitado        */
@@ -193,12 +227,14 @@ export default function Pronostico() {
     }
 
     const list = [...results, {}];
+    list[i][name] = parseInt(value);
 
     list[i]["matchId"] = id;
     list[i]["homeTeam"] = home;
     list[i]["awayTeam"] = away;
+    console.log("SLICE", list.slice(0, 6));
 
-    setResults(list);
+    setResults(list.slice(0, 6));
   }
 
   function carrouselElement(group) {
@@ -292,7 +328,7 @@ export default function Pronostico() {
                   {carrouselElement(group)}
                   <div className="cajaBoton">
                     <button
-                      disabled={disable}
+                      disabled={false}
                       onClick={handleSubmit}
                       className="btn btn-outline-light mt-5 p-30 w-25 btnEnviar"
                       id={`btnEnviar${group}`}
