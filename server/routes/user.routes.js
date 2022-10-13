@@ -1,6 +1,6 @@
 const authJwt = require("../middlewares/authJwt");
 //const controller = require("../controllers/");
-const { Users } = require("../models/models");
+const { Users, Pronostico } = require("../models/models");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -27,5 +27,42 @@ module.exports = function (app) {
       };
     });
     res.status(200).send(aux);
+  });
+
+  //PRONOSTICOS
+  app.post("/pronosticos", async (req, res) => {
+    try {
+      for (let i = 0; i < req.body.length; i++) {
+        const pronostico = await Pronostico.findOne({
+          where: { matchId: req.body[i].matchId, userId: req.body[i].userId },
+        });
+        console.log("PRONOSTICO", pronostico);
+        if (!pronostico || !{} || null) {
+          await Pronostico.create({
+            matchId: req.body[i].matchId,
+            winner: req.body[i].winner,
+            goalHome: req.body[i].goalHome,
+            goalAway: req.body[i].goalAway,
+            userId: req.body[i].userId,
+          });
+        } else {
+          console.log("YA ENVIASTE ESTE PRONOSTICO");
+          res.status(400).send({ message: "Ya enviaste este pronostico" });
+        }
+      }
+
+      res.status(200).send("Enviado");
+    } catch (err) {
+      console.log("ERROR en POST /pronosticos", err.message);
+    }
+  });
+
+  app.get("/pronosticos", async (req, res) => {
+    try {
+      const usersPronostico = await Pronostico.findAll();
+      res.send(usersPronostico);
+    } catch (error) {
+      console.log("ERROR en GET /pronosticos", error.message);
+    }
   });
 };
